@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <style>
+        /* CSS styles */
+        .header {
+            background-color: #2568FB;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .title {
+            font-family: 'Lobster', cursive;
+            font-size: 2em;
+        }
+
+        .nav a {
+            margin-left: 15px;
+            text-decoration: none;
+            color: white;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        .nav a:hover {
+            text-decoration: underline;
+        }
+
+        .search-section {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .search-section h2 {
+            font-size: 1.5em;
+        }
+
+        .movie-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .movie-poster {
+            width: 100px; /* Adjust size as needed */
+            margin-right: 20px;
+        }
+
+        .movie-details {
+            flex: 1;
+        }
+
+        .movie-title {
+            font-weight: bold;
+        }
+
+        .movie-genre {
+            color: #888; /* Lighter text color for genre */
+        }
+
+        .add-button {
+            background-color: #2568FB;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: 'Roboto Condensed', sans-serif;
+        }
+
+        .add-button:hover {
+            background-color: #FECD45;
+            color: #2568FB;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="title">Movie Tracker</h1>
+            <nav class="nav">
+                <a href="{% url 'movie_list' %}">Your Movies</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </nav>
+        </div>
+    </header>
+    <div class="search-section">
+        <h2>Which movie are you looking for...</h2>
+        <form action="{% url 'home' %}" method="get">
+            <input type="text" name="q" placeholder="Search movies..." value="{{ query }}">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    {% if movies %}
+        <h2>Search Results</h2>
+        <ul>
+            {% for movie in movies %}
+                <li class="movie-item">
+                    <img src="{{ movie.Poster }}" alt="{{ movie.Title }} Poster" class="movie-poster">
+                    <div class="movie-details">
+                        <p class="movie-title"><strong>{{ movie.Title }}</strong> ({{ movie.Year }})</p>
+                        <p class="movie-genre"><strong>Genre:</strong> {{ movie.Genre }}</p>
+                        <p><strong>Plot:</strong> {{ movie.Plot }}</p>
+                        <!-- Add button -->
+                        <form action="{% url 'add_to_movie_list' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="title" value="{{ movie.Title }}">
+                            <input type="hidden" name="year" value="{{ movie.Year }}">
+                            <input type="hidden" name="genre" value="{{ movie.Genre }}">
+                            <input type="hidden" name="plot" value="{{ movie.Plot }}">
+                            <input type="hidden" name="poster" value="{{ movie.Poster }}">
+                            <button type="submit" class="add-button">ADD</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>

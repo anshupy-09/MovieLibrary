@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Movie List</title>
+</head>
+<body>
+    <h1>Create Movie List</h1>
+    <form method="post">
+        {% csrf_token %}
+        <!-- Form fields for movie list title, description, privacy, etc. -->
+        <button type="submit">Create</button>
+    </form>
+</body>
+</html>

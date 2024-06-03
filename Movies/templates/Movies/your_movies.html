@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Movies</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto+Condensed&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        body {
+            font-family: 'Roboto Condensed', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        header {
+            background-color: #FECD45;
+            padding: 20px;
+            text-align: right;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-title {
+            font-family: 'Lobster', cursive;
+            color: #2568FB;
+            margin: 0;
+            font-size: 32px;
+        }
+        .header-link {
+            color: #2568FB;
+            text-decoration: none;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 700;
+            margin-right: 20px;
+        }
+        .container {
+            margin: 20px;
+            padding: 20px;
+            background-color: #fff;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .action-container {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .action-container select {
+            margin-right: 10px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .action-container button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #2568FB;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .checkbox-cell {
+            width: 30px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1 class="header-title">Your Movies</h1>
+    <div>
+        <a href="{% url 'home' %}" class="header-link">Home</a>
+    </div>
+</header>
+
+<div class="container">
+    <div class="action-container">
+        <form action="{% url 'your_movies' %}" method="POST">
+            {% csrf_token %}
+            <select name="action">
+                <option value="">Select Action</option>
+                <option value="edit">Edit</option>
+                <option value="delete">Delete</option>
+            </select>
+            <button type="submit" class="btn waves-effect waves-light">Apply</button>
+        </form>
+    </div>
+    {% if movies %}
+        <table>
+            <thead>
+                <tr>
+                    <th class="checkbox-cell"></th>
+                    <th>Serial Number</th>
+                    <th>Movie</th>
+                    <th>Genre</th>
+                    <th>Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in movies %}
+                    <tr>
+                        <td class="checkbox-cell"><input type="checkbox" name="selected_movies" value="{{ movie.id }}"></td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ movie.title }}</td>
+                        <td>{{ movie.genre }}</td>
+                        <td>{{ movie.year }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No movies added yet.</p>
+    {% endif %}
+</div>
+
+</body>
+</html>
